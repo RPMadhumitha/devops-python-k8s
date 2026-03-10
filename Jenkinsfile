@@ -8,10 +8,10 @@ pipeline {
     stages {
 
         stage('Clone Repository') {
-            steps {
-                git 'https://github.com/RPMadhumitha/devops-python-k8s.git'
-            }
-        }
+             steps{
+                 git branch: 'main', url: 'https://github.com/RPMadhumitha/devops-python-k8s.git'
+                }
+}
 
         stage('Build Docker Image') {
             steps {
