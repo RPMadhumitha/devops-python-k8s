@@ -8,10 +8,10 @@ pipeline {
     stages {
 
         stage('Clone Repository') {
-             steps{
-                 git branch: 'main', url: 'https://github.com/RPMadhumitha/devops-python-k8s.git'
-                }
-}
+            steps {
+                git branch: 'main', url: 'https://github.com/RPMadhumitha/devops-python-k8s.git'
+            }
+        }
 
         stage('Build Docker Image') {
             steps {
@@ -21,7 +21,12 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                sh 'docker push $IMAGE_NAME:latest'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh '''
+                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                    docker push $IMAGE_NAME:latest
+                    '''
+                }
             }
         }
 
