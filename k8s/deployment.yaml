@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: python-devops-app
-        image: devops-python-app:latest
+        image: madhumitha3199/devops-python-app:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 5000
