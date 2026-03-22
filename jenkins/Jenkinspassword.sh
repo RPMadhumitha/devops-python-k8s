@@ -1,0 +1,1 @@
+docker exec -it 212a71d0ff2df907d8bda095d69c012725f2611d2f1e020f4d8c3749eefc514f cat /var/jenkins_home/secrets/initialAdminPassword
