@@ -8,10 +8,10 @@ pipeline {
     stages {
 
         stage('Clone Repository') {
-            steps {
-                git branch: 'main', url: 'https://github.com/RPMadhumitha/devops-python-k8s.git'
-            }
-        }
+             steps{
+                 git branch: 'main', url: 'https://github.com/RPMadhumitha/devops-python-k8s.git'
+                }
+}
 
         stage('Build Docker Image') {
             steps {
@@ -21,19 +21,19 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh '''
-                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                    docker push $IMAGE_NAME:latest
-                    '''
+                  withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials',
+                                   usernameVariable: 'DOCKER_USER',
+                                   passwordVariable: 'DOCKER_PASS')]) {
+                    sh 'echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin'
+                    sh 'docker push $IMAGE_NAME:latest'
                 }
             }
         }
 
         stage('Deploy to Kubernetes') {
             steps {
-                sh 'kubectl apply -f k8s/deployment.yaml'
-                sh 'kubectl apply -f k8s/service.yaml'
+                sh 'kubectl --insecure-skip-tls-verify=true apply -f k8s/deployment.yaml'
+                sh 'kubectl --insecure-skip-tls-verify=true apply -f k8s/service.yaml '
             }
         }
 
